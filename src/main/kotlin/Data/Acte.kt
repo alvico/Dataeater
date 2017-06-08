@@ -1,49 +1,63 @@
 package Data
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 
 
+data class Event(@JacksonXmlProperty(localName="id") val id: Long = 0,
+                 @JacksonXmlProperty(localName="nom") val name: String = "",
+                 @JacksonXmlProperty(localName="nom_curt") val shortName: String = "",
+                 @JacksonXmlProperty(localName="alerta") val alert: String? = "",
+                 @JacksonXmlProperty(localName="lloc_simple") val place: Place? = Place(),
+                 @JacksonXmlProperty(localName="tipus_acte") val type: String = "",
+                 @JacksonXmlProperty(localName="rellevant") val rellevancy: String = "",
+                 @JacksonXmlProperty(localName="estat") val status: String = "",
+                 @JacksonXmlProperty(localName="estat_cicle") val statusCycle: String = "",
+                 @JacksonXmlProperty(localName="data") val data: Data = Data(),
+                 @JacksonXmlProperty(localName="classificacions") val classi: List<Classification>?)
 
-data class Event(@JsonProperty("id") val id: Long = 0,
-                 @JsonProperty("nom") val name: String = "",
-                 @JsonProperty("nom_curt") val shortName: String = "",
-                 @JsonProperty("alerta") val alert: String? = "",
-                 @JsonProperty("lloc_simple") val place: Place? = Place(),
-                 @JsonProperty("tipus_acte") val type: String = "",
-                 @JsonProperty("rellevant") val rellevancy: String = "",
-                 @JsonProperty("estat") val status: String = "",
-                 @JsonProperty("estat_cicle") val statusCycle: String = "",
-                 @JsonProperty("data") val data: Data = Data(),
-                 @JsonProperty("classificacions") val classi: List<Classification>?)
+data class Place(@JacksonXmlProperty(localName="id") val id: Long = 0,
+                 @JacksonXmlProperty(localName="nom") val name: String = "",
+                 @JacksonXmlProperty(localName="adreca_simple") val address: Address? = Address())
 
+data class Data(@JacksonXmlProperty(localName="data_inici") val dataInici: String? = "",
+                @JacksonXmlProperty(localName="hora_inic") val startHour: String? = "",
+                @JacksonXmlProperty(localName="data_proper_acte") val dataNextActe: String? = "",
+                @JacksonXmlProperty(localName="data_fi") val dataFi: String? = "")
 
-data class Place(@JsonProperty("id") val id: Long = 0,
-                 @JsonProperty("nom") val name: String = "",
-                 @JsonProperty("adreca_simple") val address: Address? = Address())
+data class Classification(@JacksonXmlProperty(localName="codi") val codi:Float? = 0f,
+                          @JacksonXmlProperty(localName="nivell") val level: String? = "")
 
-data class Data(@JsonProperty("data_inici") val dataInici: String? = "",
-                @JsonProperty("hora_inic") val startHour: String? = "",
-                @JsonProperty("data_proper_acte") val dataNextActe: String? = "",
-                @JsonProperty("data_fi") val dataFi: String? = "")
+data class Address(@JacksonXmlProperty(localName="carrer") val street: Carrer? = Carrer(),
+                   @JacksonXmlProperty(localName="numero") val streetNum: Numero? = Numero(),
+                   @JacksonXmlProperty(localName="districte") val district: District? = District(),
+                   @JacksonXmlProperty(localName="codi_postal") val postal: String? = "",
+                   @JacksonXmlProperty(localName="municipi") val municipi: Town? = Town(),
+                   @JacksonXmlProperty(localName="barri") val neighbourhood: Neighbourhood? = Neighbourhood(),
+                   @JacksonXmlProperty(localName="coordenades") val coords: Coords? = Coords())
 
-data class Classification(@JsonProperty("codi") val codi:Float? = 0f,
-                          @JsonProperty("nivell") val level: String? = "")
+data class Coords(@JacksonXmlProperty(localName="geocodificacio") val geocoords: Geocoords = Geocoords(),
+                  @JacksonXmlProperty(localName="googleMaps") val gMaps: GMaps = GMaps())
 
+data class Carrer(@JacksonXmlProperty(localName="codi", isAttribute = true) val code: String? = "",
+                  @JacksonXmlProperty(localName="carrer") @JacksonXmlText() val street: String? = "")
 
-data class Address(@JsonProperty("carrer") val street: String? = "",
-                   @JsonProperty("carrer.codi") val streetCode: String? = "",
-                   @JsonProperty("numero.enter") val streetNum: Int? = 0,
-                   @JsonProperty("districte") val district: String? = "",
-                   @JsonProperty("districte.codi") val districtCode: String? = "",
-                   @JsonProperty("codi_postal") val postal: String? = "",
-                   @JsonProperty("municipi") val municipi: String? = "",
-                   @JsonProperty("municipi.codi") val municipiCode: String? = "",
-                   @JsonProperty("barri") val neighbourhood: String? = "",
-                   @JsonProperty("barri.codi") val neighbourhoodCode: String? = "",
-                   @JsonProperty("coordenades") val coords: Coords? = Coords())
+data class Numero(@JacksonXmlProperty(localName="davant", isAttribute = true) val front: Int? = 0,
+                  @JacksonXmlProperty(localName="enter", isAttribute = true) val enter: String? = "",
+                  @JacksonXmlProperty(localName="numero") @JacksonXmlText() val number: Int? = 0)
 
-data class Coords(@JsonProperty("geocodificacio.x") val x: Float = 0.0f,
-                  @JsonProperty("geocodificacio.y") val y: Float = 0.0f,
-                  @JsonProperty("googleMaps.lat") val lat: Float = 0.0f,
-                  @JsonProperty("googleMaps.lon") val lon: Float = 0.0f)
+data class District(@JacksonXmlProperty(localName="codi", isAttribute = true) val code: String? = "",
+                    @JacksonXmlProperty(localName="districte") @JacksonXmlText() val district: String? = "")
+
+data class Town(@JacksonXmlProperty(localName="codi", isAttribute = true) val code: String? = "",
+                @JacksonXmlProperty(localName="municipi") @JacksonXmlText() val town: String? = "")
+
+data class Neighbourhood(@JacksonXmlProperty(localName="codi", isAttribute = true) val code: String? = "",
+                @JacksonXmlProperty(localName="barri") @JacksonXmlText() val neighbourhood: String? = "")
+
+data class Geocoords(@JacksonXmlProperty(localName="x", isAttribute = true) val x: Float = 0.0f,
+                     @JacksonXmlProperty(localName="y", isAttribute = true) val y: Float = 0.0f)
+
+data class GMaps(@JacksonXmlProperty(localName="lat", isAttribute = true) val lat: Float = 0.0f,
+                  @JacksonXmlProperty(localName="lon", isAttribute = true) val lon: Float = 0.0f)
