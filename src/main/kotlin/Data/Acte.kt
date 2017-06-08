@@ -1,6 +1,5 @@
 package Data
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 
@@ -27,7 +26,7 @@ data class Data(@JacksonXmlProperty(localName="data_inici") val dataInici: Strin
                 @JacksonXmlProperty(localName="data_fi") val dataFi: String? = "")
 
 data class Classification(@JacksonXmlProperty(localName="codi") val codi:Float? = 0f,
-                          @JacksonXmlProperty(localName="nivell") val level: String? = "")
+                          @JacksonXmlProperty(localName="nivell") @JacksonXmlText() val level: String? = "")
 
 data class Address(@JacksonXmlProperty(localName="carrer") val street: Carrer? = Carrer(),
                    @JacksonXmlProperty(localName="numero") val streetNum: Numero? = Numero(),
